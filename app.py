@@ -27,7 +27,9 @@ def grand_prix_total_by_year():
     col1, col2, col3 = st.columns([1, 2, 1])
 
     # create year slider in middle column
-    year = col2.slider('Select Year:', min_value=race_results['season'].min(), max_value=race_results['season'].max())
+    min_year = int(race_results['season'].min())
+    max_year = int(race_results['season'].max())
+    year = col2.slider('Select Year:', min_value=min_year, max_value=max_year)
 
     # year filter
     year_filter = race_results[race_results['season'] <= year]
