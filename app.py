@@ -374,35 +374,60 @@ def constructor_vs_driver_nationality():
                                                     yaxis=dict(title='Driver Nationality',
                                                             )
                                                    )
-
+    
     # show heatmap
     st.plotly_chart(constructor_vs_driver_nationality, use_container_width=True)
 
     # fix title
     
+### RACES PER SEASON
+
+# define races per season funciton
+def races_per_season():
+
+    # group data
+    races_per_season_group = race_results.groupby('season')['round'].nunique().reset_index(name='num_races')
+
+    # create histogram
+    races_per_season = px.histogram(races_per_season_group, 
+                                    x='num_races', 
+                                    nbins=20,
+                                    color='num_races',
+                                    color_discrete_sequence=px.colors.sequential.Reds,
+                                    labels={'num_races': 'Total Races'},
+                                    title='Distribution of Races Held Per Year'
+                                   )
+    
+    # update y axis label
+    races_per_season.update_layout(yaxis_title='Total Seasons')
+
+    # show histogram
+    st.plotly_chart(races_per_season, use_container_width=True)
+
 ### HOME INFO
     
 # define home info function
 def home_info():
 
     # write out instructions
-    st.write('Please select an option from the dropdown above.')                        
+    st.write('In the dropdown above you will find information for Formula 1 from the years 1950 - 2022')                        
 
 ### SELECT DESIRED CHART
 
 # creates options for dropdown
-chart_options = ['Select a Chart - Home', 
+chart_options = ['Home', 
                  'Average Start to Finish', 
                  'Constructor Nationality',
                  'Constructor Nationality vs Driver Nationality', 
                  'Driver Nationality', 
                  'Driver Qualifying Results', 
                  'Driver Race Results', 
-                 'Grand Prix Total by Year'
+                 'Grand Prix Total by Year',
+                 'Races Per Season'
                  ] 
 
 # create dropdown to select chart
-selected_chart = st.selectbox('', chart_options)
+selected_chart = st.selectbox('Please select and option from the dropdown below.', chart_options)
 
 # display (call) correct chart
 if selected_chart == 'Grand Prix Total by Year':
@@ -419,5 +444,7 @@ elif selected_chart == 'Average Start to Finish':
     start_to_finish()
 elif selected_chart == 'Constructor Nationality vs Driver Nationality':
     constructor_vs_driver_nationality()
-elif selected_chart == 'Select a Chart - Home':
+elif selected_chart == 'Home':
     home_info()
+elif selected_chart == 'Races Per Season':
+    races_per_season()
